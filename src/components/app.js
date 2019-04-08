@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
+import youtube from "../api/youtube";
 import SearchBar from './search_bar';
-import YTSearch from "youtube-api-search";
 import VideoList from "./video_list";
 import VideoDetail from "./video_detail";
 import _debounce from 'lodash/debounce';
-
-const API_KEY = 'AIzaSyBJS-Vt4uyPHDLAgJyF_Npg1impCBhbJGQ';
 
 export default class App extends Component {
 
@@ -21,17 +19,19 @@ export default class App extends Component {
 
     }
 
-    videoSearch(term) {
-        YTSearch({ key: API_KEY, term: term }, videos => {
-            this.setState({
-                videos: videos,
-                selectedVideo: videos[0]
-            })
+    videoSearch = async term => {
+        const { data } = await youtube.get('/search', {
+            params: { q: term }
+        });
+
+        this.setState({
+            videos: data.items,
+            selectedVideo: data.items[0]
         })
     }
 
     render() {
-        const videoSearch = _debounce((term) => { this.videoSearch(term) }, 300);
+        const videoSearch = _debounce((term) => { this.videoSearch(term) }, 1000);
 
         return (
             <div>

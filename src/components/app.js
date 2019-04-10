@@ -7,16 +7,13 @@ import _debounce from 'lodash/debounce';
 
 export default class App extends Component {
 
-    constructor(props) {
-        super(props);
+    state = {
+        videos: [],
+        selectedVideo: null
+    };
 
-        this.state = {
-            videos: [],
-            selectedVideo: null
-        };
-
+    componentDidMount() {
         this.videoSearch('Garrett Reynolds');
-
     }
 
     videoSearch = async term => {
